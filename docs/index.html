@@ -1,72 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day Interactive Page</title>
+    <title>Per il mio Valentino ❤️</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8e1e1;
+            background-color: #f9f9f9;
             text-align: center;
-            color: #333;
         }
-        .envelope {
-            width: 300px;
-            height: 200px;
-            background-color: #fff;
-            border: 2px solid #e91e63;
-            border-radius: 10px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .letter {
-            background-color: #fff4f4;
-            padding: 20px;
-            margin: 20px auto;
-            width: 250px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .gallery {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .gallery img {
+        #envelope {
             width: 200px;
-            margin: 10px;
-            border-radius: 10px;
-            transition: transform 0.2s;
+            height: 120px;
+            background: #eee;
+            border: 2px solid #ccc;
+            position: relative;
+            margin: 50px auto;
+            animation: openEnvelope 1s forwards;
         }
-        .gallery img:hover {
-            transform: scale(1.1);
+        @keyframes openEnvelope {
+            0% { transform: rotateX(0); }
+            100% { transform: rotateX(90deg); }
+        }
+        #letter {
+            width: 180px;
+            height: auto;
+            background: #fff;
+            border: 1px solid #000;
+            padding: 10px;
+            margin: auto;
+            display: none;
+        }
+        #gallery {
+            display: none;
+            margin-top: 20px;
+        }
+        #gallery img {
+            width: 100px;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Happy Valentine's Day!</h1>
-    <div class="envelope">
-        <h2>Your Special Letter</h2>
+    <div id="envelope"></div>
+    <div id="letter">
+        <h1>Buon San Valentino!</h1>
+        <p>Sei la mia dolce metà.</p>
     </div>
-    <div class="letter">
-        <p>Dear Valentine,</p>
-        <p>I just wanted to let you know how much you mean to me. You make every day feel like a special occasion!</p>
-        <p>With Love,</p>
-        <p>Your Secret Admirer</p>
+    <button onclick="openEnvelope()">Apri la busta</button>
+    <button onclick="showGallery()">Mostra Galleria</button>
+
+    <div id="gallery">
+        <img src="images/1.jpeg" alt="Image 1">
+        <img src="images/2.jpeg" alt="Image 2">
+        <img src="images/3.jpeg" alt="Image 3">
+        <img src="images/4.jpeg" alt="Image 4">
+        <img src="images/5.jpeg" alt="Image 5">
+        <img src="images/6.jpeg" alt="Image 6">
+        <img src="images/foto.jpg" alt="Foto">
     </div>
-    <h2>Gallery</h2>
-    <div class="gallery">
-        <img src="valentine1.jpg" alt="Valentine Image 1">
-        <img src="valentine2.jpg" alt="Valentine Image 2">
-        <img src="valentine3.jpg" alt="Valentine Image 3">
-    </div>
+
+    <audio id="backgroundMusic" src="audio/culo-tony-pitoni.mp3.mp3" loop></audio>
+
     <script>
-        // Simple animation for greeting
-        window.onload = function() {
-            document.querySelector('h1').style.opacity = 0;
-            setTimeout(() => { document.querySelector('h1').style.opacity = 1; }, 500);
-        };
+        function openEnvelope() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            document.getElementById('backgroundMusic').play();
+        }
+        function showGallery() {
+            document.getElementById('gallery').style.display = 'block';
+        }
     </script>
 </body>
 </html>
