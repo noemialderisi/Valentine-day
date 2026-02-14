@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per il mio Valentino ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-rosa: #fce4ec; 
+            --text-color: #880e4f;
+            --font-pattaya: 'Pattaya', sans-serif;
+        }
+
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-rosa); font-family: var(--font-pattaya); overflow: hidden; }
+
+        .fly-away { transform: translateY(-1000px) rotate(20deg) scale(0) !important; opacity: 0 !important; transition: all 1s ease-in-out !important; }
+
+        /* --- BUSTA --- */
+        .envelope-wrapper { position: relative; width: 280px; height: 180px; background-color: white; border-radius: 0 0 10px 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); cursor: pointer; z-index: 10; transition: all 0.6s ease; }
+        .flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 100px solid #f3f3f3; transform-origin: top; transition: transform 0.6s ease; z-index: 15; }
+        .open .flap { transform: rotateX(180deg); z-index: 5; }
+
+        #card { position: absolute; bottom: 10px; width: 250px; left: 8px; background: white; padding: 10px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); opacity: 0; transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 8; pointer-events: none; }
+        #card.show { opacity: 1; transform: translateY(-220px); z-index: 20; pointer-events: all; }
+
+        /* --- LETTERA FINALE --- */
+        #final-letter { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 90%; max-width: 400px; height: 550px; background: #fff0f5; background-image: repeating-linear-gradient(white 0px, white 24px, #ffcdd2 25px); padding: 30px 20px; border-radius: 5px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 100; opacity: 0; transition: all 1s ease; display: flex; flex-direction: column; align-items: center; }
+        #final-letter.reveal { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+
+        .heart-container { width: 180px; height: 160px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); }
+        .photo-heart { width: 100%; height: 100%; object-fit: cover; clip-path: url(#heart-mask); }
+        .letter-text { color: #b71c1c; line-height: 25px; text-align: center; font-size: 1.1rem; margin-top: 10px; overflow-y: auto; height: 150px; }
+
+        /* --- GALLERY --- */
+        #gallery { 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    display: none; 
+    grid-template-columns: repeat(2, 1fr); /* Due colonne uguali */
+    grid-template-rows: repeat(3, 1fr);    /* Tre righe uguali */
+    gap: 10px; 
+    padding: 20px; 
+    box-sizing: border-box; 
+    background: var(--bg-rosa); 
+    z-index: 200; 
+    align-items: center; /* Centra le foto verticalmente */
+    justify-items: center; /* Centra le foto orizzontalmente */
+}
+        .gallery-img { 
+    width: 50%; 
+    aspect-ratio: 1 / 1; /* Forza le foto a essere quadrate */
+    object-fit: cover;   /* Riempie il quadrato senza deformare i visi */
+    object-position: center; /* Inquadra il centro della foto */
+    border-radius: 8px; 
+    border: 3px solid white; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    transform: translateY(-120vh); 
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+#ti-amo { 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%) rotate(720deg) scale(0); 
+    color: #d32f2f; 
+    font-size: 3.5rem; 
+    text-shadow: 4px 4px 0 white; 
+    z-index: 500; /* Aumentato per stare SOPRA le foto */
+    transition: all 1.5s ease-out; 
+    pointer-events: none; 
+    text-align: center; 
+    width: 90%; 
+}
+        #ti-amo.show { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+
+        /* --- BOTTONI --- */
+        .btn-watch { margin-top: 20px; background: #d32f2f; color: white; padding: 12px 25px; border: none; border-radius: 25px; font-family: var(--font-pattaya); cursor: pointer; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        button { cursor: pointer; font-family: var(--font-pattaya); }
+        #btnSi { background-color: #f06292; color: white; padding: 10px 20px; border: none; border-radius: 20px; }
+        #btnNo { background-color: #eee; color: #777; padding: 10px 20px; border: none; border-radius: 20px; }
+
+        .heart-particle { position: absolute; pointer-events: none; z-index: 400; animation: floatUp 3s forwards; }
+        @keyframes floatUp { 0% { transform: translate(0,0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--moveX), -400px) scale(1.5); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <clipPath id="heart-mask" clipPathUnits="objectBoundingBox">
+                <path d="M0.5,1 C0.5,1, 0,0.7, 0,0.35 C0,0.15, 0.15,0, 0.35,0 C0.45,0, 0.5,0.05, 0.5,0.1 C0.5,0.05, 0.55,0, 0.65,0 C0.85,0, 1,0.15, 1,0.35 C1,0.7, 0.5,1, 0.5,1"></path>
+            </clipPath>
+        </defs>
+    </svg>
+
+    <audio id="audioCulo"><source src="culo-tony-pitoni.mp3" type="audio/mpeg"></audio>
+
+    <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
+        <div class="flap"></div>
+        <div id="card">
+            <h1>Vuoi essere il mio Valentino? ❤️</h1>
+            <div class="btn-group">
+                <button id="btnSi" onclick="celebrate(event)">Sì</button>
+                <button id="btnNo" onmouseover="moveNo()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-letter">
+        <div class="heart-container"><img src="foto.jpg.jpg" class="photo-heart"></div>
+        <div class="letter-text">
+            Ho passato tanto tempo a pensare cosa volevo scrivere e l'unica frase a cui riuscivo a pensare è stata "ma io lo amo", 
+            può sembrare banale ma dentro a questa frase c'è tutto: sentimenti, emozioni, ricordi, baci, abbracci sguardi, risate 
+            e i nostri due anni insieme. 
+            Giorni fa pensavo a come sarebbe stata la mia vita sena di te e non sono riuscita ad immaginare nulla, perché ormai da quando
+            ti ho incontrato la mia vita non è stata più la stessa. Ed è per questo che ho molta paura di perderti, non voglio perdere 
+            l'unica cosa che mi rende felice.
+            Spero con tutto il mio cuore di passare il resto della vita insieme a te, ci metterò tutta me stessa per farlo accadere.
+            Tu sei la mia di vita e io ci sarò sempre e comunque per te! (tranne se mi tradisci eh).
+            Ti amo lo sapevi? se si, bene, lo farò per sempre mio San Valnetino! ❤️
+            PS: Sei il mio informatico preferito.
+            Buon terzo San Valentino! ❤️
+
+            Per sempre tua, memi!
+
+        </div>
+        <button class="btn-watch" onclick="showGallery()">Watch me ✨</button>
+    </div>
+
+    <div id="gallery">
+        <img src="1.jpeg" class="gallery-img">
+        <img src="2.jpeg" class="gallery-img">
+        <img src="3.jpeg" class="gallery-img">
+        <img src="4.jpeg" class="gallery-img">
+        <img src="5.jpeg" class="gallery-img">
+        <img src="6.jpeg" class="gallery-img">
+        <div>
+    
+        <div id="ti-amo">Ti amo pasticcino 🍰</div>
+    
+        <script>
+            function openEnvelope() {
+                if(!document.getElementById('envWrapper').classList.contains('open')) {
+                    document.getElementById('envWrapper').classList.add('open');
+                    setTimeout(() => document.getElementById('card').classList.add('show'), 400);
+                }
+            }
+    
+            function moveNo() {
+                const btn = document.getElementById('btnNo');
+                btn.style.position = 'fixed';
+                btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            }
+    
+            function celebrate(e) {
+                e.stopPropagation();
+                const audio = document.getElementById('audioCulo');
+                audio.play().catch(() => {});
+                document.getElementById('envWrapper').classList.add('fly-away');
+                setTimeout(() => document.getElementById('final-letter').classList.add('reveal'), 800);
+            }
+    
+            function showGallery() {
+                document.getElementById('final-letter').style.display = 'none';
+                const gallery = document.getElementById('gallery');
+                gallery.style.display = 'grid';
+                
+                const imgs = document.querySelectorAll('.gallery-img');
+                imgs.forEach((img, i) => {
+                    setTimeout(() => {
+                        img.style.transform = 'translateY(0)';
+                    }, i * 150);
+                });
+    
+                setTimeout(() => {
+                    document.getElementById('ti-amo').classList.add('show');
+                    setInterval(() => {
+                        const h = document.createElement('div');
+                        h.className = 'heart-particle';
+                        h.innerHTML = '❤️';
+                        h.style.left = Math.random() * 100 + 'vw';
+                        h.style.top = '100vh';
+                        h.style.setProperty('--moveX', (Math.random() * 200 - 100) + 'px');
+                        document.body.appendChild(h);
+                        setTimeout(() => h.remove(), 3000);
+                    }, 300);
+                }, 2000);
+            }
+        </script>
+    </body>
+    </html>
